@@ -19,7 +19,7 @@
         <tr>
             <td>${c.categoryid}</td>
             <td>${c.categoryname}</td>
-            <td>${c.userid}</td>
+            <td>${c.owner.userid}</td>
             <td>${c.status}</td>
         </tr>
     </c:forEach>

@@ -1,6 +1,7 @@
 package vn.host.controllers;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,6 +12,8 @@ import vn.host.entity.Category;
 import vn.host.entity.User;
 
 import java.io.IOException;
+
+@WebServlet(urlPatterns = "/category/*")
 
 public class CategoryController extends HttpServlet {
     private final CategoryDao dao = new CategoryDaoImpl();
