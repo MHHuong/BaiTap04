@@ -10,36 +10,41 @@ import vn.host.entity.User;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/user/*", "/manager/*", "/admin/*", "/category/*"})
+@WebFilter(urlPatterns = {"/*"})
 public class AuthFilter implements Filter {
+    private static final String[] PUBLIC_PATHS = {
+            "/login", "/logout", "/assets/", "/css/"
+    };
+
+    private boolean isPublic(HttpServletRequest req, String path) {
+        if (path.equals("/") || path.equals("/index.jsp")) return true;
+        for (String p : PUBLIC_PATHS) {
+            if (path.startsWith(p)) return true;
+        }
+        return false;
+    }
+
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
+        String path = req.getRequestURI().substring(req.getContextPath().length());
+
+        if (isPublic(req, path)) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         HttpSession session = req.getSession(false);
         User acc = (session == null) ? null : (User) session.getAttribute(Constant.SESSION_ACCOUNT);
-        String path = req.getRequestURI().substring(req.getContextPath().length());
 
         if (acc == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
-        int role = acc.getRoleid();
 
-        if (path.startsWith("/admin/") && role != Constant.ROLE_ADMIN) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
-        if (path.startsWith("/user/") && role != Constant.ROLE_USER) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
-        if (path.startsWith("/manager/") && role != Constant.ROLE_MANAGER) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
         chain.doFilter(request, response);
     }
 }
