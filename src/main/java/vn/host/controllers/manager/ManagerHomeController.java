@@ -20,6 +20,6 @@ public class ManagerHomeController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User u = (User) req.getSession().getAttribute(Constant.SESSION_ACCOUNT);
         req.setAttribute("cateList", categoryDao.findByUserId(u.getUserid()));
-        req.getRequestDispatcher("WEB-INF/views/manager-home.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/manager-home.jsp").forward(req, resp);
     }
 }
