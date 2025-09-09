@@ -10,6 +10,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void insert(Category category) {
-        categoryDao.create(category);
+        categoryDao.insert(category);
     }
 }

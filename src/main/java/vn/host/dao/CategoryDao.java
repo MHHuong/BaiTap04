@@ -1,11 +1,21 @@
 package vn.host.dao;
-import java.util.List;
+
 import vn.host.entity.Category;
 
+import java.util.List;
+
 public interface CategoryDao {
-    void create(Category category);
-    Category update(Category category);
-    Category delete(Category category);
-    Category findById(int id);
     List<Category> findAll();
+
+    List<Category> findByUserId(int userId);
+
+    Category findOwnedById(int id, int ownerId);
+
+    Category findById(int id);
+
+    void insert(Category c);
+
+    boolean updateOwned(Category c, int ownerId);
+
+    boolean deleteOwned(int id, int ownerId);
 }
