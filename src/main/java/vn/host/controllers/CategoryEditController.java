@@ -36,11 +36,7 @@ public class CategoryEditController extends HttpServlet {
             return;
         }
 
-        // Manager chỉ xem form (nếu muốn) nhưng POST sẽ bị chặn.
-        // User chỉ được sửa khi là chủ sở hữu => hiển thị form vẫn OK,
-        // còn POST sẽ kiểm tra chặt hơn. Nếu muốn chặn ngay tại GET thì có thể:
         if (role == Constant.ROLE_USER) {
-            // Nếu không sở hữu thì 403
             Category owned = categoryDao.findOwnedById(id, acc.getUserid());
             if (owned == null) {
                 resp.sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -111,7 +107,12 @@ public class CategoryEditController extends HttpServlet {
             return;
         }
 
-        resp.sendRedirect(req.getContextPath() + "/category/list");
+        switch (role) {
+            case Constant.ROLE_ADMIN -> resp.sendRedirect(req.getContextPath() + Constant.ADMIN_HOME);
+            case Constant.ROLE_MANAGER -> resp.sendRedirect(req.getContextPath() + Constant.MANAGER_HOME);
+            case Constant.ROLE_USER -> resp.sendRedirect(req.getContextPath() + Constant.USER_HOME);
+            default -> resp.sendRedirect(req.getContextPath() + "/");
+        }
     }
 
     private String trim(String s) {

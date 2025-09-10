@@ -31,7 +31,6 @@ public class CategoryCreateController extends HttpServlet {
         User acc = (User) req.getSession().getAttribute(Constant.SESSION_ACCOUNT);
         int role = acc.getRoleid();
 
-        // Manager không được tạo
         if (role == Constant.ROLE_MANAGER) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
@@ -62,7 +61,12 @@ public class CategoryCreateController extends HttpServlet {
             return;
         }
 
-        resp.sendRedirect(req.getContextPath() + "/category/list");
+        switch (role) {
+            case Constant.ROLE_ADMIN -> resp.sendRedirect(req.getContextPath() + Constant.ADMIN_HOME);
+            case Constant.ROLE_MANAGER -> resp.sendRedirect(req.getContextPath() + Constant.MANAGER_HOME);
+            case Constant.ROLE_USER -> resp.sendRedirect(req.getContextPath() + Constant.USER_HOME);
+            default -> resp.sendRedirect(req.getContextPath() + "/");
+        }
     }
 
     private String trim(String s) {

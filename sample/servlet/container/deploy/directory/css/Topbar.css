@@ -1,0 +1,40 @@
+.topbar {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.topbar .left a {
+    margin-right: 12px;
+    text-decoration: none;
+    color: #333;
+}
+
+.topbar .brand {
+    font-weight: 700;
+    margin-right: 16px;
+}
+
+.topbar .right {
+    background: transparent;
+    border: 1px solid #ddd;
+    color: #3399FF;
+}
+
+.btn.ghost {
+    background: #3399FF;
+    color: #fff;
+
+}
+
+.muted {
+    color: #888;
+    font-style: italic;
+}

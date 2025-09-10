@@ -10,7 +10,7 @@ import vn.host.entity.User;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/admin/*", "/manager/*", "/category/*"})
+@WebFilter(urlPatterns = {"/admin/*", "/manager/*", "/category/*", "/user/*"})
 
 public class RoleFilter implements Filter {
 
@@ -29,20 +29,29 @@ public class RoleFilter implements Filter {
         String path = req.getRequestURI().substring(req.getContextPath().length());
         int role = acc.getRoleid();
 
-        // /admin/*: chỉ admin
         if (path.startsWith("/admin/") && role != Constant.ROLE_ADMIN) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+            deny(resp, req, role);
             return;
         }
 
-        // /manager/*: admin, manager
-        if (path.startsWith("/manager/") &&
-                !(role == Constant.ROLE_ADMIN || role == Constant.ROLE_MANAGER)) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+        if (path.startsWith("/manager/") && role != Constant.ROLE_MANAGER) {
+            deny(resp, req, role);
             return;
         }
-
+        if (path.startsWith("/user/") && role != Constant.ROLE_USER) {
+            deny(resp, req, role);
+            return;
+        }
 
         chain.doFilter(request, response);
+    }
+
+    private void deny(HttpServletResponse resp, HttpServletRequest req, int role) throws IOException {
+        switch (role) {
+            case Constant.ROLE_ADMIN -> resp.sendRedirect(req.getContextPath() + Constant.ADMIN_HOME);
+            case Constant.ROLE_MANAGER -> resp.sendRedirect(req.getContextPath() + Constant.MANAGER_HOME);
+            case Constant.ROLE_USER -> resp.sendRedirect(req.getContextPath() + Constant.USER_HOME);
+            default -> resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+        }
     }
 }

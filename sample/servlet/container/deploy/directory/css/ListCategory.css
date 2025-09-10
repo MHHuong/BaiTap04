@@ -1,12 +1,24 @@
-/* Table styles */
+/* List (table) */
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+    padding: 16px;
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
 .table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 12px;
     background: #fff;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .table th, .table td {
@@ -25,28 +37,22 @@
     background: #f9fbff;
 }
 
-/* Buttons & muted text */
 .btn {
     display: inline-block;
     padding: 8px 12px;
+    border-radius: 4px;
     background: #0078d7;
     color: #fff !important;
-    border-radius: 4px;
     text-decoration: none;
-    transition: background .2s ease-in-out;
+    border: none;
 }
 
 .btn:hover {
     background: #005a9e;
 }
 
-.muted {
-    color: #888;
-    font-style: italic;
-}
-
 table form button {
-    padding: 4px 10px;
+    padding: 6px 10px;
     border: none;
     border-radius: 4px;
     background: #e02424;

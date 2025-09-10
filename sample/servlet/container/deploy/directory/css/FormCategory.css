@@ -1,0 +1,50 @@
+/* Form card */
+.form-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+    padding: 16px;
+}
+
+.form-row {
+    margin-bottom: 12px;
+}
+
+.form-row label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.form-row input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-actions {
+    margin-top: 8px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background: #0078d7;
+    color: #fff !important;
+    text-decoration: none;
+    border: none;
+}
+
+.btn:hover {
+    background: #005a9e;
+}
+
+.error {
+    margin-top: 8px;
+    color: #c00;
+    font-size: 13px;
+}

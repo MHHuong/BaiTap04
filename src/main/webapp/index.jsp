@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Trang chủ - BaiTap04</title>
-    <link rel="stylesheet" href="<%= ctx %>/css/styleIndex.css">
+    <link rel="stylesheet" href="<%= ctx %>/css/Index.css">
 </head>
 <body>
 
