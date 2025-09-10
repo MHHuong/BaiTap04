@@ -1,25 +1,12 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: MAI HONG TIN
-  Date: 9/9/2025
-  Time: 2:46 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<h2>Manager Home - Category của tôi</h2>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Status</th>
-    </tr>
-    <c:forEach var="c" items="${cateList}">
-        <tr>
-            <td>${c.categoryid}</td>
-            <td>${c.categoryname}</td>
-            <td>${c.status}</td>
-        </tr>
-    </c:forEach>
-</table>
-<a href="${pageContext.request.contextPath}/category/list">Quản lý Category</a>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<meta charset="UTF-8">
+
+<jsp:include page="/WEB-INF/views/topbar/topbar.jsp"/>
+
+<div class="layout">
+    <%-- Manager: chỉ xem, KHÔNG hiển thị form create --%>
+    <jsp:include page="/WEB-INF/views/category/list.jsp">
+        <jsp:param name="title" value="Category của tôi (Manager)"/>
+    </jsp:include>
+</div>

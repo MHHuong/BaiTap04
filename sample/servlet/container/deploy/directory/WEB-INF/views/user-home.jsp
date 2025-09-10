@@ -1,28 +1,17 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: MAI HONG TIN
-  Date: 9/9/2025
-  Time: 2:45 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<h2>User Home - Tất cả Category</h2>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Owner</th>
-        <th>Status</th>
-    </tr>
-    <c:forEach var="c" items="${cateList}">
-        <tr>
-            <td>${c.categoryid}</td>
-            <td>${c.categoryname}</td>
-            <td>${c.owner.userid}</td>
-            <td>${c.status}</td>
-        </tr>
-    </c:forEach>
-</table>
-<a href="${pageContext.request.contextPath}/category/list">Quản lý Category của tôi</a>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<meta charset="UTF-8">
 
+<jsp:include page="/WEB-INF/views/topbar/topbar.jsp"/>
+
+<div class="layout">
+    <%--    <c:if test="${role == 1 || role == 3}">--%>
+    <%--        <jsp:include page="/WEB-INF/views/category/form.jsp">--%>
+    <%--            <jsp:param name="mode" value="create"/>--%>
+    <%--        </jsp:include>--%>
+    <%--    </c:if>--%>
+
+    <jsp:include page="/WEB-INF/views/category/list.jsp">
+        <jsp:param name="title" value="Tất cả Category"/>
+    </jsp:include>
+</div>

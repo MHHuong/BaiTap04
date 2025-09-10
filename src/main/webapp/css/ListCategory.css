@@ -1,0 +1,65 @@
+/* List (table) */
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+    padding: 16px;
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th, .table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.table thead th {
+    background: #fafafa;
+    font-weight: 600;
+    color: #333;
+}
+
+.table tr:hover td {
+    background: #f9fbff;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background: #0078d7;
+    color: #fff !important;
+    text-decoration: none;
+    border: none;
+}
+
+.btn:hover {
+    background: #005a9e;
+}
+
+table form button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    background: #e02424;
+    color: #fff;
+    cursor: pointer;
+}
+
+table form button:hover {
+    background: #b71c1c;
+}

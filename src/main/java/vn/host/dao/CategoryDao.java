@@ -9,13 +9,13 @@ public interface CategoryDao {
 
     List<Category> findByUserId(int userId);
 
-    Category findOwnedById(int id, int ownerId);
-
     Category findById(int id);
 
-    void insert(Category c);
+    Category findOwnedById(int id, int ownerId); // dùng cho user
 
-    boolean updateOwned(Category c, int ownerId);
+    boolean insert(Category c);
 
-    boolean deleteOwned(int id, int ownerId);
+    boolean update(Category c);
+
+    boolean delete(int id);
 }
