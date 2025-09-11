@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+    <mapping path="/*" decorator="main.jsp"/>
+
+    <excludes>
+        <pattern>/assets/*</pattern>
+        <pattern>/css/*</pattern>
+        <pattern>/js/*</pattern>
+        <pattern>/images/*</pattern>
+        <pattern>/image</pattern>
+        <pattern>/api/*</pattern>
+    </excludes>
+</sitemesh>

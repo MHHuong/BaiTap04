@@ -13,11 +13,13 @@ import java.io.IOException;
 @WebFilter(urlPatterns = {"/*"})
 public class AuthFilter implements Filter {
     private static final String[] PUBLIC_PATHS = {
-            "/login", "/logout", "/assets/", "/css/"
+            "/login", "/logout",
+            "/css/", "/js/", "/images/", "/image", "/assets/",
+            "/webjars/", "/favicon.ico"
     };
 
     private boolean isPublic(HttpServletRequest req, String path) {
-        if (path.equals("/") || path.equals("/index.jsp")) return true;
+        if (path.equals("/") || path.equals("/index.jsp") || path.equals("/main.jsp")) return true;
         for (String p : PUBLIC_PATHS) {
             if (path.startsWith(p)) return true;
         }
