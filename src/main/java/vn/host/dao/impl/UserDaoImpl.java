@@ -12,13 +12,17 @@ public class UserDaoImpl implements UserDao {
     public User findUserByName(String username) {
         EntityManager em = JpaUntil.getEntityManager();
         try {
-            return em.createQuery("SELECT u FROM User u WHERE u.username = :u", User.class).setParameter("u", username).getSingleResult();
+            return em.createQuery(
+                            "SELECT u FROM User u WHERE u.username = :u", User.class)
+                    .setParameter("u", username)
+                    .getSingleResult();
         } catch (NoResultException e) {
             return null;
         } finally {
             em.close();
         }
     }
+
     @Override
     public boolean updateProfile(int id, String fullname, String phone, String avatarUrl) {
         EntityManager em = JpaUntil.getEntityManager();
@@ -30,17 +34,14 @@ public class UserDaoImpl implements UserDao {
                 tx.rollback();
                 return false;
             }
-            u.setFullname(fullname);
-            u.setPhone(phone);
-            if (avatarUrl != null && !avatarUrl.isBlank()) {
-                u.setAvatarUrl(avatarUrl);
-            }
+            if (fullname != null) u.setFullname(fullname);
+            if (phone != null) u.setPhone(phone);
+            if (avatarUrl != null) u.setAvatarUrl(avatarUrl);
             em.merge(u);
             tx.commit();
             return true;
-        } catch (Exception e) {
+        } catch (Exception ex) {
             if (tx.isActive()) tx.rollback();
-            e.printStackTrace();
             return false;
         } finally {
             em.close();
@@ -56,5 +57,4 @@ public class UserDaoImpl implements UserDao {
             em.close();
         }
     }
-
 }

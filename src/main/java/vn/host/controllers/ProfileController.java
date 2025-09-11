@@ -14,24 +14,29 @@ import java.io.IOException;
 @WebServlet(urlPatterns = {"/profile", "/profile/edit"})
 @MultipartConfig(
         fileSizeThreshold = 1 * 1024 * 1024,   // 1MB
-        maxFileSize = 5 * 1024 * 1024,         // 5MB
-        maxRequestSize = 10 * 1024 * 1024      // 10MB
+        maxFileSize = 10 * 1024 * 1024,        // 10MB
+        maxRequestSize = 20 * 1024 * 1024      // 20MB
 )
 public class ProfileController extends HttpServlet {
+
+    private static String trimOrNull(String s) {
+        if (s == null) return null;
+        s = s.trim();
+        return s.isEmpty() ? null : s;
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String path = req.getServletPath();
         HttpSession session = req.getSession(false);
         User acc = (session == null) ? null : (User) session.getAttribute(Constant.SESSION_ACCOUNT);
-
         if (acc == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        if ("/profile/edit".equals(path)) {
+        String uri = req.getRequestURI();
+        if (uri.endsWith("/edit")) {
             req.getRequestDispatcher("/WEB-INF/views/profile/profile-edit.jsp").forward(req, resp);
         } else {
             req.getRequestDispatcher("/WEB-INF/views/profile/profile.jsp").forward(req, resp);
@@ -41,9 +46,6 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        // Quan trọng: với multipart, cần @MultipartConfig để getParameter hoạt động
-        req.setCharacterEncoding("UTF-8");
-
         HttpSession session = req.getSession(false);
         User acc = (session == null) ? null : (User) session.getAttribute(Constant.SESSION_ACCOUNT);
         if (acc == null) {
@@ -51,35 +53,39 @@ public class ProfileController extends HttpServlet {
             return;
         }
 
-        // Đọc các trường dạng text
         String fullname = trimOrNull(req.getParameter("fullname"));
         String phone    = trimOrNull(req.getParameter("phone"));
-        String avatarUrlParam = trimOrNull(req.getParameter("avatarUrl")); // người dùng có thể nhập URL thủ công
+        String avatarUrlParam = trimOrNull(req.getParameter("avatarUrl"));
 
-        // Upload file (nếu có)
-        String finalAvatarUrl = avatarUrlParam; // mặc định dùng URL đã nhập (nếu có)
+        // Ưu tiên file upload; nếu không có file thì dùng URL nhập tay (avatarUrlParam)
+        String finalAvatarUrl = null;
+
         Part filePart = null;
         try {
             filePart = req.getPart("avatarFile");
-        } catch (Exception ignored) {}
+        } catch (IllegalStateException ignore) {}
 
         if (filePart != null && filePart.getSize() > 0) {
-            String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
-            String uploadPath = req.getServletContext().getRealPath("/uploads");
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) uploadDir.mkdirs();
-            filePart.write(uploadPath + File.separator + fileName);
+            // Lưu vào /uploads bên trong webapp (thư mục thực tế trong container)
+            String uploadsDir = req.getServletContext().getRealPath("/uploads");
+            File dir = new File(uploadsDir);
+            if (!dir.exists()) dir.mkdirs();
 
-            // Chọn 1 cách và dùng nhất quán:
-            // C1) Lưu đường dẫn tuyệt đối theo context (hiển thị dùng ${u.avatarUrl}):
+            // tên file an toàn (có thể thêm random/UUID nếu bạn muốn)
+            String submitted = filePart.getSubmittedFileName();
+            String fileName = System.currentTimeMillis() + "_" + submitted.replaceAll("[^a-zA-Z0-9._-]", "_");
+            File saved = new File(dir, fileName);
+            filePart.write(saved.getAbsolutePath());
+
+            // Lưu đường dẫn tương đối để render trên web
             finalAvatarUrl = req.getContextPath() + "/uploads/" + fileName;
-            // C2) Hoặc lưu đường dẫn gốc app ("/uploads/..."), khi hiển thị phải dùng ${ctx}${u.avatarUrl}
-            // finalAvatarUrl = "/uploads/" + fileName;
+        } else if (avatarUrlParam != null) {
+            finalAvatarUrl = avatarUrlParam; // có thể là /uploads/xxx hoặc URL tuyệt đối http(s)
         }
 
-        // Cập nhật DB
         UserDaoImpl dao = new UserDaoImpl();
-        boolean ok = dao.updateProfile(acc.getUserid(),
+        boolean ok = dao.updateProfile(
+                acc.getUserid(),
                 (fullname != null ? fullname : acc.getFullname()),
                 (phone != null ? phone : acc.getPhone()),
                 (finalAvatarUrl != null ? finalAvatarUrl : acc.getAvatarUrl())
@@ -91,16 +97,10 @@ public class ProfileController extends HttpServlet {
             return;
         }
 
-        // Nạp lại user mới lên session để topbar/profile hiển thị ngay giá trị mới
+        // Reload user -> cập nhật session ngay để topbar/profile hiển thị mới
         User refreshed = dao.findUserById(acc.getUserid());
         session.setAttribute(Constant.SESSION_ACCOUNT, refreshed);
 
         resp.sendRedirect(req.getContextPath() + "/profile");
-    }
-
-    private static String trimOrNull(String s) {
-        if (s == null) return null;
-        s = s.trim();
-        return s.isEmpty() ? null : s;
     }
 }
