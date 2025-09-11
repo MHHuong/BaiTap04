@@ -1,4 +1,4 @@
-package vn.host.controllers.user;
+package vn.host.controllers;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-@WebServlet("/user/profile")
+@WebServlet("/profile")
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024,        // 1MB
         maxFileSize = 5L * 1024 * 1024,         // 5MB
@@ -40,7 +40,7 @@ public class ProfileController extends HttpServlet {
 
         User u = userDao.findUserById(acc.getUserid());
         req.setAttribute("user", u);
-        req.getRequestDispatcher("/WEB-INF/views/user/profile.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(req, resp);
     }
 
     @Override

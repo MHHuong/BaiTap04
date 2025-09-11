@@ -3,6 +3,7 @@
     <mapping path="/*" decorator="main.jsp"/>
 
     <excludes>
+        <pattern>/login</pattern>
         <pattern>/assets/*</pattern>
         <pattern>/css/*</pattern>
         <pattern>/js/*</pattern>
