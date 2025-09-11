@@ -19,19 +19,21 @@ public class UserDaoImpl implements UserDao {
             em.close();
         }
     }
-
     @Override
-    public boolean updateProfile(int id, String fullname, String phone, String imageFileName) {
+    public boolean updateProfile(int id, String fullname, String phone, String avatarUrl) {
         EntityManager em = JpaUntil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
             User u = em.find(User.class, id);
-            if (u == null) { tx.rollback(); return false; }
+            if (u == null) {
+                tx.rollback();
+                return false;
+            }
             u.setFullname(fullname);
             u.setPhone(phone);
-            if (imageFileName != null) {
-                u.setImages(imageFileName);
+            if (avatarUrl != null && !avatarUrl.isBlank()) {
+                u.setAvatarUrl(avatarUrl);
             }
             em.merge(u);
             tx.commit();

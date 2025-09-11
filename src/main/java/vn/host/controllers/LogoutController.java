@@ -9,14 +9,13 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/logout")
+@WebServlet(urlPatterns = {"/logout"})
 public class LogoutController extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession s = req.getSession(false);
-        if (s != null) {
-            s.invalidate();
-        }
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        if (session != null) session.invalidate();
         resp.sendRedirect(req.getContextPath() + "/login");
     }
 }
